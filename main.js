@@ -21,7 +21,14 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
+    let banlist = "./data/banned.json"
+    let banned = JSON.parse(fs.readFileSync(banlist, 'utf8'))
+    banned = banned.users
     if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (banned[message.author.id]) {
+        message.channel.send("You cant use this bots commands. You are also not tracked by this bot. Reason: " + banned[message.author.id].Reason)
+        return
+    }
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase()
     if (command === 'ping') {

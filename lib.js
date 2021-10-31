@@ -1,6 +1,10 @@
 const fs = require('fs')
 
 function tempdatainit(bot) {
+    let banlist = "./data/banned.json"
+    let banned = JSON.parse(fs.readFileSync(banlist, 'utf8'))
+    banned = banned.users
+
     let now = new Date()
     let channels = bot.channels.cache
     channels.forEach(chan => {
@@ -11,17 +15,22 @@ function tempdatainit(bot) {
         let channelName = chan.name
         tempdata.users = {}
         users.forEach(person => {
-            tempdata.users[person.user.id] = {
-                'nick': person.user.username,
-                'channelId': channelId,
-                'channelName': channelName,
-                'entered': now
+            if (!banned[person.user.id]) {
+                tempdata.users[person.user.id] = {
+                    'nick': person.user.username,
+                    'channelId': channelId,
+                    'channelName': channelName,
+                    'entered': now
+                }
             }
         });
     });
 }
 
 function checkstates(oldv, newv) {
+    let banlist = "./data/banned.json"
+    let banned = JSON.parse(fs.readFileSync(banlist, 'utf8'))
+    banned = banned.users
 
     let now = new Date()
     let userId = newv.id
@@ -30,6 +39,8 @@ function checkstates(oldv, newv) {
     let oldChannelNick
     let newChannelId
     let newChannelNick
+
+    if (banned[userId]) { return }
 
     if (oldv.channelID == null) {
         oldChannelId = null
