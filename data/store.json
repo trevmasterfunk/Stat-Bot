@@ -1,0 +1,24 @@
+{
+  "stock": {
+    "Blueshell": {
+      "description": "Removes 60 Minutes from the richest user",
+      "costdesc": "30 Minutes",
+      "cost": 30
+    },
+    "Lightning": {
+      "description": "Slows down all users currently earning minutes by 10% for 10 minutes",
+      "costdesc": "Number of victims * 5 Minutes",
+      "cost": 5
+    },
+    "Candy": {
+      "description": "Speeds up all users currently earning minutes by 10% for 10 minutes",
+      "costdesc": "Number of victims * 5 Minutes",
+      "cost": 5
+    },
+    "Hell": {
+      "description": "Disconnects all users in the discord",
+      "costdesc": "2,400 Minutes",
+      "cost": 2400
+    }
+  }
+}
