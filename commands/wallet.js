@@ -1,4 +1,5 @@
 const fs = require('fs');
+const lib = require('./../lib.js');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
@@ -16,7 +17,7 @@ module.exports = {
             userdata = data.users[userid]
         }
 
-        let total = numberWithCommas(Math.round(userdata.total / (1000 * 60)))
+        let total = numberWithCommas(Math.round(lib.gettotaltime(userid, data) / (1000 * 60)))
         let totals = {}
 
         for (const chan in userdata.channels) {
@@ -29,6 +30,10 @@ module.exports = {
                     time: time
                 }
             }
+        }
+        totals["Deductions"] = {
+            channel: "Deductions",
+            time: numberWithCommas(Math.round(userdata.deductions / (1000 * 60)))
         }
 
         const embeddedmsg = new MessageEmbed()

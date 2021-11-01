@@ -1,4 +1,5 @@
 const fs = require('fs');
+const lib = require('./../lib.js');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
@@ -25,7 +26,7 @@ module.exports = {
             embeddesc = "Forbes evaluation of users net worth in this scord"
             for (const userid in data.users) {
                 userdata = data.users[userid]
-                totals[userdata.nick] = Math.round(userdata.total / (1000 * 60))
+                totals[userdata.nick] = Math.round(lib.gettotaltime(userid, data) / (1000 * 60))
             }
         }
 

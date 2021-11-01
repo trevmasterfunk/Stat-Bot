@@ -13,7 +13,6 @@ function tempdatainit(bot) {  //initializes global temp object based on who is i
         if (users.size == 0) { return }
         let channelId = chan.id
         let channelName = chan.name
-        tempdata.users = {}
         users.forEach(person => {
             if (!banned[person.user.id]) {
                 tempdata.users[person.user.id] = {
@@ -91,15 +90,14 @@ function updatetime(userid, now) {  //called in checkstats if it is found that a
     if (!data.users[userid]) {
         data.users[userid] = {
             nick: user.nick,
-            total: timediff,
-            channels: {}
+            channels: {},
+            deductions: 0
         }
         data.users[userid].channels[user.channelId] = {
             name: user.channelName,
             time: timediff
         }
     } else {
-        data.users[userid].total = data.users[userid].total + timediff
         let oldtime
         if (!data.users[userid].channels[user.channelId]) {
             oldtime = 0
@@ -133,7 +131,6 @@ function updatedata() {  //called in intervals to save user progress incase some
         if (!data.users[userid]) {
             data.users[userid] = {
                 nick: user.nick,
-                total: timediff,
                 channels: {},
                 deductions: 0
             }
@@ -142,7 +139,6 @@ function updatedata() {  //called in intervals to save user progress incase some
                 time: timediff
             }
         } else {
-            data.users[userid].total = data.users[userid].total + timediff
             let oldtime
             if (!data.users[userid].channels[user.channelId]) {
                 oldtime = 0
@@ -158,4 +154,17 @@ function updatedata() {  //called in intervals to save user progress incase some
     saveJsonData(data, jsonpath)
 }
 
-module.exports = { checkstates, tempdatainit, saveJsonData, updatedata };
+function gettotaltime(userid, data) {
+    let userdata = data.users[userid]
+    let channels = userdata.channels
+    let deductions = userdata.deductions
+    let total = 0
+
+    for (chan in channels) {
+        total += channels[chan].time
+    }
+    total = total + deductions
+    return total
+}
+
+module.exports = { checkstates, tempdatainit, saveJsonData, updatedata, gettotaltime };

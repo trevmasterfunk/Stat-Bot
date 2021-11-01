@@ -45,33 +45,43 @@ module.exports = {
 }
 
 function blueshell(msg) {
-    let cost = 30 * 60000 //cost * conversion to miliseconds
-    let effect = 60 * 60000 //effect * conversion to miliseconds
+    let item = "Blueshell"
+    let storepath = "./data/store.json"
+    let store = JSON.parse(fs.readFileSync(storepath, 'utf8')).stock
+
+    let cost = store[item].cost * 60000 //cost * conversion to miliseconds
+    let effect = store[item].effect * 60000 //effect * conversion to miliseconds
+
     let receipt = "Not enough money for transaction."
     let customerid = msg.author.id
 
     let datapath = "./data/data.json"
     let userdata = JSON.parse(fs.readFileSync(datapath, 'utf8'))
-    if (userdata.users[customerid].total <= cost) {
+    if (lib.gettotaltime(customerid, userdata) <= cost) {
         return receipt
     }
     let targetid = ""
     let targettotal = 0
     for (const user in userdata.users) {
-        if (userdata.users[user].total > targettotal) {
+        let temptotal = lib.gettotaltime(user, userdata)
+        if (temptotal > targettotal) {
             targetid = user
-            targettotal = userdata.users[user].total
+            targettotal = temptotal
         }
     }
-    userdata.users[targetid].total = targettotal - effect
-    userdata.users[customerid].total = userdata.users[customerid].total - cost
-    receipt = ">>> Your blueshell hit " + userdata.users[targetid].nick + "."
+    userdata.users[targetid].deductions = userdata.users[targetid].deductions - effect
+    userdata.users[customerid].deductions = userdata.users[customerid].deductions - cost
+    receipt = ">>> Your blueshell hit " + userdata.users[targetid].nick + ". They now have: " + numberWithCommas(Math.round(lib.gettotaltime(customerid, userdata) / (1000 * 60)))
     lib.saveJsonData(userdata, datapath)
     return receipt
 }
 
 async function hell(msg, client) {
-    let cost = 2400 * 60000 //cost * conversion to miliseconds
+    let item = "Hell"
+    let storepath = "./data/store.json"
+    let store = JSON.parse(fs.readFileSync(storepath, 'utf8')).stock
+
+    let cost = store[item].cost * 60000 //cost * conversion to miliseconds
     let receipt = "Not enough money for transaction."
     let customerid = msg.author.id
 
@@ -101,8 +111,15 @@ async function hell(msg, client) {
         }
     }
 
+    userdata.users[customerid].deductions = userdata.users[customerid].deductions - cost
+    lib.saveJsonData(userdata, datapath)
+
     receipt = ">>> Congrats! Hell is your domain! You disconnected " + usersdcd + " users."
 
     return receipt
 
+}
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
