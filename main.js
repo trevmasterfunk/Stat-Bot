@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const fs = require('fs');
 const lib = require('./lib.js')
+const keepAlive = require('./server');
 
 let prefix = '-';  //prefix that must be first in message to get bot to issue commands
 
@@ -51,4 +52,5 @@ client.on('voiceStateUpdate', async (oldState, newState) => { //called any time 
     lib.checkstates(oldState, newState)
 })
 
+keepAlive();
 client.login(process.env.BOTTOKEN);

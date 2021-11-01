@@ -340,3 +340,6 @@ ASALocalRun/
 # Ignore specific userspecific files
 data/data.json
 data/banned.json
+
+# Ignore replit files
+.replit
