@@ -30,7 +30,7 @@ module.exports = {
         }
 
         const embeddedmsg = new MessageEmbed()
-            .setTitle('Recipet')
+            .setTitle('Receipt')
         if (reply == "Not enough money for transaction.") {
             embeddedmsg.setDescription(reply)
         } else if (reply == "Transaction Failed.") {
@@ -52,7 +52,7 @@ function blueshell(msg) {
 
     let datapath = "./data/data.json"
     let userdata = JSON.parse(fs.readFileSync(datapath, 'utf8'))
-    if (userdata.users[customerid].total < cost) {
+    if (userdata.users[customerid].total <= cost) {
         return receipt
     }
     let targetid = ""
@@ -78,7 +78,7 @@ async function hell(msg, client) {
     let datapath = "./data/data.json"
     let userdata = JSON.parse(fs.readFileSync(datapath, 'utf8'))
 
-    if (userdata.users[customerid].total < cost) {
+    if (userdata.users[customerid].total <= cost) {
         return receipt
     }
 
