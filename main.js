@@ -25,9 +25,9 @@ client.on('ready', () => {  //runs when bot first starts
 });
 
 client.on('message', message => {  //runs when bot sees a new message
-    let banlist = "./data/banned.json"
-    let banned = JSON.parse(fs.readFileSync(banlist, 'utf8'))
-    banned = banned.users
+    let data = "./data/data.json"
+    let banned = JSON.parse(fs.readFileSync(data, 'utf8'))
+    banned = banned.banned
     if (!message.content.startsWith(prefix) || message.author.bot) return;  //message has to have prefix and not be a bot
     if (banned[message.author.id]) {
         message.channel.send("You cant use this bots commands. You are also not tracked by this bot. Reason: " + banned[message.author.id].Reason)  //reply to banned user trying to use bot

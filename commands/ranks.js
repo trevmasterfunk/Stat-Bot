@@ -45,7 +45,7 @@ module.exports = {
             embeddedmessage.addFields(
                 {
                     name: username,
-                    value: timeval + " Incelbucks™"
+                    value: timeval + " Minutes"
                 }
             )
             i += 1

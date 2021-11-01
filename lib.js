@@ -1,9 +1,9 @@
 const fs = require('fs')
 
 function tempdatainit(bot) {  //initializes global temp object based on who is in the discord currently
-    let banlist = "./data/banned.json"
+    let banlist = "./data/data.json"
     let banned = JSON.parse(fs.readFileSync(banlist, 'utf8'))
-    banned = banned.users
+    banned = banned.banned
 
     let now = new Date()
     let channels = bot.channels.cache
@@ -28,9 +28,9 @@ function tempdatainit(bot) {  //initializes global temp object based on who is i
 }
 
 function checkstates(oldv, newv) {  //called when there is a voicestateupdate event. checks to see if anyone joined, left, or moved voice channels
-    let banlist = "./data/banned.json"
+    let banlist = "./data/data.json"
     let banned = JSON.parse(fs.readFileSync(banlist, 'utf8'))
-    banned = banned.users
+    banned = banned.banned
 
     let now = new Date()
     let userId = newv.id
@@ -134,7 +134,8 @@ function updatedata() {  //called in intervals to save user progress incase some
             data.users[userid] = {
                 nick: user.nick,
                 total: timediff,
-                channels: {}
+                channels: {},
+                deductions: 0
             }
             data.users[userid].channels[user.channelId] = {
                 name: user.channelName,
