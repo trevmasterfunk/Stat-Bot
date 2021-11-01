@@ -4,9 +4,9 @@ const client = new Discord.Client();
 const fs = require('fs');
 const lib = require('./lib.js')
 
-let prefix = '-';
+let prefix = '-';  //prefix that must be first in message to get bot to issue commands
 
-global.tempdata = { users: {} }
+global.tempdata = { users: {} }  //object that contains all users currently connected to a voice channel, which channel it is, and their join time
 
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
@@ -15,21 +15,21 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command)
 };
 
-let updatedatainterval
+let updatedatainterval  //will be interval that calls the updatedata function. this function saves all current data in the tempdata to the data json file
 
-client.on('ready', () => {
+client.on('ready', () => {  //runs when bot first starts
     console.log('Logged in as ' + client.user.tag);
-    lib.tempdatainit(client)
-    updatedatainterval = setInterval(lib.updatedata, 300000);
+    lib.tempdatainit(client) //initialize the tempdata object
+    updatedatainterval = setInterval(lib.updatedata, 300000); //runs updatedata every 5 minutes
 });
 
-client.on('message', message => {
+client.on('message', message => {  //runs when bot sees a new message
     let banlist = "./data/banned.json"
     let banned = JSON.parse(fs.readFileSync(banlist, 'utf8'))
     banned = banned.users
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (!message.content.startsWith(prefix) || message.author.bot) return;  //message has to have prefix and not be a bot
     if (banned[message.author.id]) {
-        message.channel.send("You cant use this bots commands. You are also not tracked by this bot. Reason: " + banned[message.author.id].Reason)
+        message.channel.send("You cant use this bots commands. You are also not tracked by this bot. Reason: " + banned[message.author.id].Reason)  //reply to banned user trying to use bot
         return
     }
     const args = message.content.slice(prefix.length).split(/ +/);
@@ -47,7 +47,7 @@ client.on('message', message => {
     }
 });
 
-client.on('voiceStateUpdate', async (oldState, newState) => {
+client.on('voiceStateUpdate', async (oldState, newState) => { //called any time anything in a voice channel changes such as user mute, user deafened, channel change
     lib.checkstates(oldState, newState)
 })
 

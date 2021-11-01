@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-function tempdatainit(bot) {
+function tempdatainit(bot) {  //initializes global temp object based on who is in the discord currently
     let banlist = "./data/banned.json"
     let banned = JSON.parse(fs.readFileSync(banlist, 'utf8'))
     banned = banned.users
@@ -27,7 +27,7 @@ function tempdatainit(bot) {
     });
 }
 
-function checkstates(oldv, newv) {
+function checkstates(oldv, newv) {  //called when there is a voicestateupdate event. checks to see if anyone joined, left, or moved voice channels
     let banlist = "./data/banned.json"
     let banned = JSON.parse(fs.readFileSync(banlist, 'utf8'))
     banned = banned.users
@@ -74,7 +74,7 @@ function checkstates(oldv, newv) {
     }
 }
 
-function addtotemp(userid, username, channelId, channelName, now) {
+function addtotemp(userid, username, channelId, channelName, now) {  //used to add user to the global temp object
     tempdata.users[userid] = {
         'nick': username,
         'channelId': channelId,
@@ -83,7 +83,7 @@ function addtotemp(userid, username, channelId, channelName, now) {
     }
 }
 
-function updatetime(userid, now) {
+function updatetime(userid, now) {  //called in checkstats if it is found that a user has left or moved channels. used to save their progress into the data file
     let jsonpath = "./data/data.json"
     let data = JSON.parse(fs.readFileSync(jsonpath, 'utf8'))
     let user = tempdata.users[userid]
@@ -115,13 +115,13 @@ function updatetime(userid, now) {
     saveJsonData(data, jsonpath)
 }
 
-function saveJsonData(file, save_path) {
+function saveJsonData(file, save_path) {  //used lots of places to save an object into a json file
     fs.writeFile(save_path, JSON.stringify(file), (err) => {
         if (err) console.error(err)
     })
 }
 
-function updatedata() {
+function updatedata() {  //called in intervals to save user progress incase something happens to bot
     let jsonpath = "./data/data.json"
     let data = JSON.parse(fs.readFileSync(jsonpath, 'utf8'))
     let now = new Date()
@@ -129,6 +129,7 @@ function updatedata() {
     for (const userid in tempdata.users) {
         let user = tempdata.users[userid]
         let timediff = now - user.entered
+        tempdata.users[userid].entered = now
         if (!data.users[userid]) {
             data.users[userid] = {
                 nick: user.nick,
