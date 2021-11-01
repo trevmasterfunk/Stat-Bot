@@ -15,9 +15,12 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command)
 };
 
+let updatedatainterval
+
 client.on('ready', () => {
     console.log('Logged in as ' + client.user.tag);
     lib.tempdatainit(client)
+    updatedatainterval = setInterval(lib.updatedata, 300000);
 });
 
 client.on('message', message => {

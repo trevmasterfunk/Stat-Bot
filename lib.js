@@ -121,4 +121,39 @@ function saveJsonData(file, save_path) {
     })
 }
 
-module.exports = { checkstates, tempdatainit, saveJsonData };
+function updatedata() {
+    let jsonpath = "./data/data.json"
+    let data = JSON.parse(fs.readFileSync(jsonpath, 'utf8'))
+    let now = new Date()
+
+    for (const userid in tempdata.users) {
+        let user = tempdata.users[userid]
+        let timediff = now - user.entered
+        if (!data.users[userid]) {
+            data.users[userid] = {
+                nick: user.nick,
+                total: timediff,
+                channels: {}
+            }
+            data.users[userid].channels[user.channelId] = {
+                name: user.channelName,
+                time: timediff
+            }
+        } else {
+            data.users[userid].total = data.users[userid].total + timediff
+            let oldtime
+            if (!data.users[userid].channels[user.channelId]) {
+                oldtime = 0
+            } else {
+                oldtime = data.users[userid].channels[user.channelId].time
+            }
+            data.users[userid].channels[user.channelId] = {
+                name: user.channelName,
+                time: oldtime + (timediff)
+            }
+        }
+    }
+    saveJsonData(data, jsonpath)
+}
+
+module.exports = { checkstates, tempdatainit, saveJsonData, updatedata };
