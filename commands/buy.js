@@ -4,7 +4,7 @@ const lib = require('./../lib.js');
 
 module.exports = {
     name: 'buy',
-    description: "This command will allow you to buy items from the shop.",
+    description: "This command will allow you to buy items from the shop. For example '-buy blueshell' will buy a blueshell if you have enough currency.",
     async execute(message, args, client) {
         let storepath = "./data/store.json"
         let store = JSON.parse(fs.readFileSync(storepath, 'utf8'))

@@ -37,6 +37,8 @@ client.on('message', message => {  //runs when bot sees a new message
     const command = args.shift().toLowerCase()
     if (command === 'ping') {
         client.commands.get(command).execute(message, args)
+    } else if (command === "help") {
+        client.commands.get("help").execute(message, args, client)
     } else if (command === "wallet") {
         client.commands.get("wallet").execute(message, args)
     } else if (command === "ranks") {
