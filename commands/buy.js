@@ -7,10 +7,17 @@ module.exports = {
     description: "This command will allow you to buy items from the shop.",
     async execute(message, args, client) {
         let storepath = "./data/store.json"
-        let data = JSON.parse(fs.readFileSync(storepath, 'utf8'))
+        let store = JSON.parse(fs.readFileSync(storepath, 'utf8'))
+
+        let datapath = "./data/data.json"
+        let data = JSON.parse(fs.readFileSync(datapath, 'utf8'))
+
+        if (!data.users[msg.author.id]) {
+            message.channel.send = "You have not yet logged time in statbot. Join a channel then leave or wait 5 minutes to be entered into the log."
+        }
 
         let buyitem
-        for (item in data.stock) {
+        for (item in store.stock) {
             if (args[0].toLowerCase() == item.toLowerCase()) {
                 buyitem = item
             }
