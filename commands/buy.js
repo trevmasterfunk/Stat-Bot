@@ -71,7 +71,7 @@ function blueshell(msg) {
     }
     userdata.users[targetid].deductions = userdata.users[targetid].deductions - effect
     userdata.users[customerid].deductions = userdata.users[customerid].deductions - cost
-    receipt = ">>> Your blueshell hit " + userdata.users[targetid].nick + ". They now have: " + numberWithCommas(Math.round(lib.gettotaltime(customerid, userdata) / (1000 * 60)))
+    receipt = ">>> Your blueshell hit " + userdata.users[targetid].nick + ". They now have: " + numberWithCommas(Math.round(lib.gettotaltime(targetid, userdata) / (1000 * 60)))
     lib.saveJsonData(userdata, datapath)
     return receipt
 }
