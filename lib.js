@@ -14,7 +14,7 @@ function tempdatainit(bot) {  //initializes global temp object based on who is i
         let channelId = chan.id
         let channelName = chan.name
         users.forEach(person => {
-            if (!banned[person.user.id]) {
+            if (!banned[person.user.id] && !person.user.bot) {
                 tempdata.users[person.user.id] = {
                     'nick': person.user.username,
                     'channelId': channelId,
