@@ -88,7 +88,7 @@ async function hell(msg, client) {
     let datapath = "./data/data.json"
     let userdata = JSON.parse(fs.readFileSync(datapath, 'utf8'))
 
-    if (userdata.users[customerid].total <= cost) {
+    if (lib.gettotaltime(customerid, userdata) <= cost) {
         return receipt
     }
 
