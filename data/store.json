@@ -5,7 +5,7 @@
       "costdesc": "30 Minutes",
       "cost": 30,
       "effect": 60,
-      "cooldown": 86400000
+      "cooldown": 14400000
     },
     "Hell": {
       "description": "Disconnects all users in the discord",

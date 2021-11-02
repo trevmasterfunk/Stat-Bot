@@ -12,8 +12,8 @@ module.exports = {
         let datapath = "./data/data.json"
         let data = JSON.parse(fs.readFileSync(datapath, 'utf8'))
 
-        if (!data.users[msg.author.id]) {
-            message.channel.send = "You have not yet logged time in statbot. Join a channel then leave or wait 5 minutes to be entered into the log."
+        if (!data.users[message.author.id]) {
+            message.channel.send("You have not yet logged time in statbot. Join a channel then leave or wait 5 minutes to be entered into the log.")
             return
         }
 
