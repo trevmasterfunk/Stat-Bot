@@ -4,7 +4,8 @@
       "description": "Removes 60 Minutes from the richest user",
       "costdesc": "30 Minutes",
       "cost": 30,
-      "effect": 60
+      "effect": 60,
+      "cooldown": 86400000
     },
     "Lightning": {
       "description": "Slows down all users currently earning minutes by 10% for 10 minutes",
@@ -19,7 +20,8 @@
     "Hell": {
       "description": "Disconnects all users in the discord",
       "costdesc": "2,400 Minutes",
-      "cost": 2400
+      "cost": 2400,
+      "cooldown": 432000000
     }
   }
 }

@@ -91,6 +91,7 @@ function updatetime(userid, now) {  //called in checkstats if it is found that a
         data.users[userid] = {
             nick: user.nick,
             channels: {},
+            cooldowns: {},
             deductions: 0
         }
         data.users[userid].channels[user.channelId] = {
@@ -132,6 +133,7 @@ function updatedata() {  //called in intervals to save user progress incase some
             data.users[userid] = {
                 nick: user.nick,
                 channels: {},
+                cooldowns: {},
                 deductions: 0
             }
             data.users[userid].channels[user.channelId] = {

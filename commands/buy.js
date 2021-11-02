@@ -31,13 +31,7 @@ module.exports = {
 
         const embeddedmsg = new MessageEmbed()
             .setTitle('Receipt')
-        if (reply == "Not enough money for transaction.") {
-            embeddedmsg.setDescription(reply)
-        } else if (reply == "Transaction Failed.") {
-            embeddedmsg.setDescription(reply)
-        } else {
-            embeddedmsg.setDescription("Your purchase of " + buyitem + " was successful!\n" + reply)
-        }
+        embeddedmsg.setDescription(reply)
 
 
         message.channel.send({ embed: embeddedmsg })
@@ -60,6 +54,22 @@ function blueshell(msg) {
     if (lib.gettotaltime(customerid, userdata) <= cost) {
         return receipt
     }
+
+    let now = new Date()
+    let then = -999999999999999
+    if (!userdata.users[customerid].cooldowns[item]) {
+        userdata.users[customerid].cooldowns[item] = now
+    } else {
+        then = new Date(userdata.users[customerid].cooldowns[item])
+    }
+    if ((now - then) < store[item].cooldown && then != now) {
+        receipt = item + " is on cooldown for you. Try again in " + Math.round((((store[item].cooldown - (now - then)) / 3600000)) * 10) / 10 + " Hours"
+        return receipt
+    }
+
+
+    console.log('stopper')
+
     let targetid = ""
     let targettotal = 0
     for (const user in userdata.users) {
@@ -71,7 +81,8 @@ function blueshell(msg) {
     }
     userdata.users[targetid].deductions = userdata.users[targetid].deductions - effect
     userdata.users[customerid].deductions = userdata.users[customerid].deductions - cost
-    receipt = ">>> Your blueshell hit " + userdata.users[targetid].nick + ". They now have: " + numberWithCommas(Math.round(lib.gettotaltime(targetid, userdata) / (1000 * 60)))
+    receipt = "Your purchase of " + item + " was successful!\n "
+    receipt = receipt + ">>> Your blueshell hit " + userdata.users[targetid].nick + ". They now have: " + numberWithCommas(Math.round(lib.gettotaltime(targetid, userdata) / (1000 * 60)))
     lib.saveJsonData(userdata, datapath)
     return receipt
 }
@@ -89,6 +100,19 @@ async function hell(msg, client) {
     let userdata = JSON.parse(fs.readFileSync(datapath, 'utf8'))
 
     if (lib.gettotaltime(customerid, userdata) <= cost) {
+        let receipt = "Not enough money for transaction."
+        return receipt
+    }
+
+    let now = new Date()
+    let then = -999999999999999
+    if (!userdata.users[customerid].cooldowns[item]) {
+        userdata.users[customerid].cooldowns[item] = now
+    } else {
+        then = new Date(userdata.users[customerid].cooldowns[item])
+    }
+    if ((now - then) < store[item].cooldown && then != now) {
+        receipt = item + " is on cooldown for you. Try again in " + Math.round((((store[item].cooldown - (now - then)) / 3600000)) * 10) / 10 + " Hours"
         return receipt
     }
 
@@ -114,7 +138,8 @@ async function hell(msg, client) {
     userdata.users[customerid].deductions = userdata.users[customerid].deductions - cost
     lib.saveJsonData(userdata, datapath)
 
-    receipt = ">>> Congrats! Hell is your domain! You disconnected " + usersdcd + " users."
+    receipt = "Your purchase of " + item + " was successful!\n "
+    receipt = receipt + ">>> Congrats! Hell is your domain! You disconnected " + usersdcd + " users."
 
     return receipt
 
