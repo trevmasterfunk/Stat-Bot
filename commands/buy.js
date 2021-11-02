@@ -14,6 +14,7 @@ module.exports = {
 
         if (!data.users[msg.author.id]) {
             message.channel.send = "You have not yet logged time in statbot. Join a channel then leave or wait 5 minutes to be entered into the log."
+            return
         }
 
         let buyitem
