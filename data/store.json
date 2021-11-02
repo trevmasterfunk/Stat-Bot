@@ -7,16 +7,6 @@
       "effect": 60,
       "cooldown": 86400000
     },
-    "Lightning": {
-      "description": "Slows down all users currently earning minutes by 10% for 10 minutes",
-      "costdesc": "Number of victims * 5 Minutes",
-      "cost": 5
-    },
-    "Candy": {
-      "description": "Speeds up all users currently earning minutes by 10% for 10 minutes",
-      "costdesc": "Number of victims * 5 Minutes",
-      "cost": 5
-    },
     "Hell": {
       "description": "Disconnects all users in the discord",
       "costdesc": "2,400 Minutes",
