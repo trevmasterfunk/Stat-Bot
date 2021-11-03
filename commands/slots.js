@@ -43,6 +43,16 @@ module.exports = {
             }
         }
 
+        //checks to make sure user can afford wager
+        let usertotaltime = lib.gettotaltime(customerid, data)
+        let wagertemp = wager * 60000
+        if (usertotaltime <= wagertemp) {
+            reply = "Not enough money. You can thank TR!"
+            embeddedmsg.setDescription(reply)
+            message.channel.send({ embed: embeddedmsg })
+            return
+        }
+
         //set and check cooldown
         let now = new Date()
         let then = -999999999999999
