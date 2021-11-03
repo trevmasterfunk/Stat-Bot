@@ -39,7 +39,7 @@ module.exports = {
                 message.channel.send({ embed: embeddedmsg })
                 return
             } else {
-                wager = args[0]
+                wager = parseInt(args[0], 10)
             }
         }
 
