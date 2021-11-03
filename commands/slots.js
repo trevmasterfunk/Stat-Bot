@@ -135,6 +135,9 @@ module.exports = {
             { name: "Response", value: payoutresponse, inline: false }
         )
 
+        Payout = Payout * 60000
+        wager = wager * 60000
+
         data.users[customerid].deductions = data.users[customerid].deductions + Payout - wager
 
         // //save data
