@@ -49,6 +49,8 @@ client.on('message', message => {  //runs when bot sees a new message
         client.commands.get("buy").execute(message, args, client)
     } else if (command === "coinflip") {
         client.commands.get("coinflip").execute(message, args, client)
+    } else if (command === "slots") {
+        client.commands.get("slots").execute(message, args, client)
     }
 });
 
