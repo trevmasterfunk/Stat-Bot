@@ -74,9 +74,7 @@ function blueshell(msg) {
         receipt = item + " is on cooldown for you. Try again in " + Math.round((((store[item].cooldown - (now - then)) / 3600000)) * 10) / 10 + " Hours"
         return receipt
     }
-
-
-    console.log('stopper')
+    userdata.users[customerid].cooldowns[item] = now
 
     let targetid = ""
     let targettotal = 0
@@ -123,6 +121,7 @@ async function hell(msg, client) {
         receipt = item + " is on cooldown for you. Try again in " + Math.round((((store[item].cooldown - (now - then)) / 3600000)) * 10) / 10 + " Hours"
         return receipt
     }
+    userdata.users[customerid].cooldowns[item] = now
 
     let usersdcd = 0
     let channels = client.channels.cache.values();
