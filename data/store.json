@@ -13,5 +13,13 @@
       "cost": 2400,
       "cooldown": 432000000
     }
+  },
+  "games": {
+    "Coinflip": {
+      "description": "flip a coin for a chance to win one minute",
+      "cost": 1,
+      "effect": 2,
+      "cooldown": 5000
+    }
   }
 }
