@@ -52,6 +52,12 @@ module.exports = {
             message.channel.send({ embed: embeddedmsg })
             return
         }
+        if (isNaN(wager)) {
+            reply = "Incorrect entry!"
+            embeddedmsg.setDescription(reply)
+            message.channel.send({ embed: embeddedmsg })
+            return
+        }
 
         //set and check cooldown
         let now = new Date()
