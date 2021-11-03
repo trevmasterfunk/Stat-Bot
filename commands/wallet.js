@@ -1,27 +1,27 @@
-const fs = require('fs');
-const lib = require('./../lib.js');
-const { MessageEmbed } = require('discord.js');
+const fs = require('fs')
+const lib = require('./../lib.js')
+const { MessageEmbed } = require('discord.js')
 
 module.exports = {
     name: 'wallet',
     description: "This command will display your current net worth as well as your channel stat totals.",
     execute(message, args, client) {
-        let jsonpath = "./data/data.json"
-        let data = JSON.parse(fs.readFileSync(jsonpath, 'utf8'))
+
+        let data = globaluserdata
         let userid = message.author.id
-        let userdata
+        let _userdata
         if (!data.users[userid]) {
             message.channel.send("You're broke, bitch.")
             return
         } else {
-            userdata = data.users[userid]
+            _userdata = data.users[userid]
         }
 
         let total = numberWithCommas(Math.round(lib.gettotaltime(userid, data) / (1000 * 60)))
         let totals = {}
 
-        for (const chan in userdata.channels) {
-            let channel = userdata.channels[chan]
+        for (const chan in _userdata.channels) {
+            let channel = _userdata.channels[chan]
             let name = channel.name
             let time = Math.round(channel.time / (1000 * 60))
             if (time > 0) {
@@ -33,7 +33,7 @@ module.exports = {
         }
         totals["Deductions"] = {
             channel: "Deductions",
-            time: numberWithCommas(Math.round(userdata.deductions / (1000 * 60)))
+            time: numberWithCommas(Math.round(_userdata.deductions / (1000 * 60)))
         }
 
         const embeddedmsg = new MessageEmbed()
@@ -53,5 +53,5 @@ module.exports = {
 }
 
 function numberWithCommas(x) {
-    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
 }

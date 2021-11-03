@@ -1,6 +1,6 @@
-const fs = require('fs');
-const { MessageEmbed } = require('discord.js');
-const lib = require('./../lib.js');
+const fs = require('fs')
+const { MessageEmbed } = require('discord.js')
+const lib = require('./../lib.js')
 
 module.exports = {
     name: 'buy',
@@ -17,6 +17,10 @@ module.exports = {
             return
         }
 
+        if (args[0] == null) {
+            message.channel.send("Invalid entry.")
+            return
+        }
         let buyitem
         for (item in store.stock) {
             if (args[0].toLowerCase() == item.toLowerCase()) {
@@ -57,8 +61,8 @@ function blueshell(msg) {
     let receipt = "Not enough money for transaction."
     let customerid = msg.author.id
 
-    let datapath = "./data/data.json"
-    let userdata = JSON.parse(fs.readFileSync(datapath, 'utf8'))
+
+    let userdata = globaluserdata
     if (lib.gettotaltime(customerid, userdata) <= cost) {
         return receipt
     }
@@ -89,7 +93,8 @@ function blueshell(msg) {
     userdata.users[customerid].deductions = userdata.users[customerid].deductions - cost
     receipt = "Your purchase of " + item + " was successful!\n "
     receipt = receipt + ">>> Your blueshell hit " + userdata.users[targetid].nick + ". They now have: " + numberWithCommas(Math.round(lib.gettotaltime(targetid, userdata) / (1000 * 60)))
-    lib.saveJsonData(userdata, datapath)
+
+    globaluserdata = userdata
     return receipt
 }
 
@@ -102,8 +107,7 @@ async function hell(msg, client) {
     let receipt = "Not enough money for transaction."
     let customerid = msg.author.id
 
-    let datapath = "./data/data.json"
-    let userdata = JSON.parse(fs.readFileSync(datapath, 'utf8'))
+    let userdata = globaluserdata
 
     if (lib.gettotaltime(customerid, userdata) <= cost) {
         let receipt = "Not enough money for transaction."
@@ -124,7 +128,7 @@ async function hell(msg, client) {
     userdata.users[customerid].cooldowns[item] = now
 
     let usersdcd = 0
-    let channels = client.channels.cache.values();
+    let channels = client.channels.cache.values()
     for (const chan of channels) {
         let members = chan.members.values()
         if (chan.type == 'voice') {
@@ -133,9 +137,9 @@ async function hell(msg, client) {
                     usersdcd++
                     let target = client.channels.cache.get(chan.id).members.get(member.id)
                     try {
-                        await target.voice.kick();
+                        await target.voice.kick()
                     } catch (e) {
-                        console.error(e);
+                        console.error(e)
                     }
                 }
             }
@@ -143,7 +147,7 @@ async function hell(msg, client) {
     }
 
     userdata.users[customerid].deductions = userdata.users[customerid].deductions - cost
-    lib.saveJsonData(userdata, datapath)
+    globaluserdata = userdata
 
     receipt = "Your purchase of " + item + " was successful!\n "
     receipt = receipt + ">>> Congrats! Hell is your domain! You disconnected " + usersdcd + " users."
@@ -153,5 +157,5 @@ async function hell(msg, client) {
 }
 
 function numberWithCommas(x) {
-    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
 }

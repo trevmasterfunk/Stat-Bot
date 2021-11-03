@@ -1,6 +1,6 @@
-const fs = require('fs');
-const { MessageEmbed } = require('discord.js');
-const lib = require('../lib.js');
+const fs = require('fs')
+const { MessageEmbed } = require('discord.js')
+const lib = require('../lib.js')
 
 module.exports = {
     name: 'slots',
@@ -11,8 +11,7 @@ module.exports = {
         let store = JSON.parse(fs.readFileSync(storepath, 'utf8'))
 
         // get user data
-        let datapath = "./data/data.json"
-        let data = JSON.parse(fs.readFileSync(datapath, 'utf8'))
+        let data = globaluserdata
 
         //customerdata
         let customerid = message.author.id
@@ -157,12 +156,12 @@ module.exports = {
         data.users[customerid].deductions = data.users[customerid].deductions + Payout - wager
 
         // //save data
-        lib.saveJsonData(data, datapath)
+        globaluserdata = data
 
         message.channel.send({ embed: embeddedmsg })
     }
 }
 
 function getrandom(max) {
-    return Math.floor(Math.random() * max);
+    return Math.floor(Math.random() * max)
 }

@@ -1,6 +1,6 @@
-const fs = require('fs');
-const { MessageEmbed } = require('discord.js');
-const lib = require('../lib.js');
+const fs = require('fs')
+const { MessageEmbed } = require('discord.js')
+const lib = require('../lib.js')
 
 module.exports = {
     name: 'coinflip',
@@ -14,8 +14,7 @@ module.exports = {
         let effect = store.games["Coinflip"].effect * 60000 //effect * conversion to miliseconds
 
         // get user data
-        let datapath = "./data/data.json"
-        let data = JSON.parse(fs.readFileSync(datapath, 'utf8'))
+        let data = globaluserdata
         //customerdata
         let customerid = message.author.id
 
@@ -58,7 +57,7 @@ module.exports = {
         data.users[customerid].cooldowns['Coinflip'] = now
 
         //flip coin
-        let coin = (Math.floor(Math.random() * 2) == 0);
+        let coin = (Math.floor(Math.random() * 2) == 0)
         if (coin) { coin = "heads" } else { coin = "tails" }
 
         //determine if they won or not
@@ -71,7 +70,7 @@ module.exports = {
         }
 
         //save data
-        lib.saveJsonData(data, datapath)
+        globaluserdata = data
 
         //send message
         embeddedmsg.setDescription(reply)

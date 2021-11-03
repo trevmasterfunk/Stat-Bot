@@ -1,14 +1,14 @@
-const fs = require('fs');
-const lib = require('./../lib.js');
-const { MessageEmbed } = require('discord.js');
+const fs = require('fs')
+const lib = require('./../lib.js')
+const { MessageEmbed } = require('discord.js')
 
 module.exports = {
     name: 'ranks',
     description: "This command will show you the current ranking of users in this discord acording to net worth. If 'stats' is added to the end of 'ranks', ie. '-ranks stats' this command will display the earnings, not net worth.",
     execute(message, args, client) {
-        let jsonpath = "./data/data.json"
-        let data = JSON.parse(fs.readFileSync(jsonpath, 'utf8'))
-        let userdata// = data.users[userid]
+
+        let data = globaluserdata
+        let userdata
         let totals = {}
         let embeddesc
         if (args[0] == "stats") {

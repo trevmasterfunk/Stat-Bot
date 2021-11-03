@@ -1,5 +1,5 @@
-const fs = require('fs');
-const { MessageEmbed } = require('discord.js');
+const fs = require('fs')
+const { MessageEmbed } = require('discord.js')
 
 module.exports = {
     name: 'store',

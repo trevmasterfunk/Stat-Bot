@@ -22,8 +22,8 @@ function tempdatainit(bot) {  //initializes global temp object based on who is i
                     'entered': now
                 }
             }
-        });
-    });
+        })
+    })
 }
 
 function checkstates(oldv, newv) {  //called when there is a voicestateupdate event. checks to see if anyone joined, left, or moved voice channels
@@ -84,7 +84,7 @@ function addtotemp(userid, username, channelId, channelName, now) {  //used to a
 
 function updatetime(userid, now) {  //called in checkstats if it is found that a user has left or moved channels. used to save their progress into the data file
     let jsonpath = "./data/data.json"
-    let data = JSON.parse(fs.readFileSync(jsonpath, 'utf8'))
+    let data = globaluserdata
     let user = tempdata.users[userid]
     let timediff = now - user.entered
     if (!data.users[userid]) {
@@ -111,18 +111,12 @@ function updatetime(userid, now) {  //called in checkstats if it is found that a
         }
     }
     delete tempdata.users[userid]
-    saveJsonData(data, jsonpath)
-}
-
-function saveJsonData(file, save_path) {  //used lots of places to save an object into a json file
-    fs.writeFile(save_path, JSON.stringify(file), (err) => {
-        if (err) console.error(err)
-    })
+    globaluserdata = data
 }
 
 function updatedata() {  //called in intervals to save user progress incase something happens to bot
     let jsonpath = "./data/data.json"
-    let data = JSON.parse(fs.readFileSync(jsonpath, 'utf8'))
+    let data = globaluserdata
     let now = new Date()
 
     for (const userid in tempdata.users) {
@@ -169,4 +163,10 @@ function gettotaltime(userid, data) {
     return total
 }
 
-module.exports = { checkstates, tempdatainit, saveJsonData, updatedata, gettotaltime };
+function saveJsonData(file, save_path) {  //used lots of places to save an object into a json file
+    fs.writeFile(save_path, JSON.stringify(file), (err) => {
+        if (err) console.error(err)
+    })
+}
+
+module.exports = { checkstates, tempdatainit, saveJsonData, updatedata, gettotaltime }
