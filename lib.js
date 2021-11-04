@@ -114,7 +114,8 @@ function updatetime(userid, now) {  //called in checkstats if it is found that a
     globaluserdata = data
 }
 
-function updatedata() {  //called in intervals to save user progress incase something happens to bot
+async function updatedata() {  //called in intervals to save user progress incase something happens to bot
+    busy = true
     let jsonpath = "./data/data.json"
     let data = globaluserdata
     let now = new Date()
@@ -147,7 +148,8 @@ function updatedata() {  //called in intervals to save user progress incase some
             }
         }
     }
-    saveJsonData(data, jsonpath)
+    await saveJsonData(data, jsonpath)
+    busy = false
 }
 
 function gettotaltime(userid, data) {
@@ -163,10 +165,18 @@ function gettotaltime(userid, data) {
     return total
 }
 
-function saveJsonData(file, save_path) {  //used lots of places to save an object into a json file
-    fs.writeFile(save_path, JSON.stringify(file), (err) => {
-        if (err) console.error(err)
-    })
+async function saveJsonData(file, save_path) {  //used lots of places to save an object into a json file
+    try {
+        await fs.promises.writeFile(save_path, JSON.stringify(file))
+    } catch (err) {
+        console.log(err)
+    }
 }
 
-module.exports = { checkstates, tempdatainit, saveJsonData, updatedata, gettotaltime }
+function shutdown() {
+    await updatedata()
+    client.destroy()
+    throw new Error("Bot shutting down")
+}
+
+module.exports = { checkstates, tempdatainit, saveJsonData, updatedata, gettotaltime, shutdown }

@@ -23,7 +23,7 @@ let updatedatainterval  //will be interval that calls the updatedata function. t
 client.on('ready', () => {  //runs when bot first starts
     console.log('Logged in as ' + client.user.tag)
     lib.tempdatainit(client) //initialize the tempdata object
-    updatedatainterval = setInterval(lib.updatedata, 300000) //runs updatedata every 5 minutes
+    updatedatainterval = setInterval(lib.updatedata, 120000) //runs updatedata every 5 minutes
 })
 
 client.on('message', message => {  //runs when bot sees a new message
@@ -55,8 +55,7 @@ client.on('message', message => {  //runs when bot sees a new message
         client.commands.get("slots").execute(message, args, client)
     } else if (command === "admin" && message.author.id == "353267226733838349") {
         if (args[0] == 'shutdown') {
-            client.destroy()
-            throw new Error("Bot shutting down")
+            lib.shutdown()
         }
     }
 })
