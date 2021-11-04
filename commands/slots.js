@@ -131,6 +131,7 @@ module.exports = {
         let jackpot = store.games["Slots"].jackpot
         let Payout = 0
         let payoutresponse = "   No matches. Try again! Maybe if you bet more you'll win big :)"
+        let middle = rand[1]
         if (choices[rand[0]] == jackpot && choices[rand[1]] == jackpot && choices[rand[2]] == jackpot) {
             Payout = wager * 100
             payoutresponse = "   JACKPOT!!!!!!!!! DING DING DING"
@@ -140,6 +141,9 @@ module.exports = {
         } else if (rand[0] == rand[1] || rand[1] == rand[2]) {
             Payout = wager * 5
             payoutresponse = "  Ooo so close! Two in a row!"
+        } else if ((rand[0] == (middle - 1) && rand[2] == (middle + 1)) || rand[2] == (middle - 1) && rand[0] == (middle + 1)) {
+            Payout = wager * 2
+            payoutresponse = "  You hit a diagonal"
         }
 
         //combine message into embed
