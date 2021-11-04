@@ -17,13 +17,13 @@ module.exports = {
             _userdata = data.users[userid]
         }
 
-        let total = numberWithCommas(Math.round(lib.gettotaltime(userid, data) / (1000 * 60)))
+        let total = numberWithCommas(Math.floor(lib.gettotaltime(userid, data) / (1000 * 60)))
         let totals = {}
 
         for (const chan in _userdata.channels) {
             let channel = _userdata.channels[chan]
             let name = channel.name
-            let time = Math.round(channel.time / (1000 * 60))
+            let time = Math.floor(channel.time / (1000 * 60))
             if (time > 0) {
                 totals[name] = {
                     channel: name,
@@ -33,7 +33,7 @@ module.exports = {
         }
         totals["Deductions"] = {
             channel: "Deductions",
-            time: numberWithCommas(Math.round(_userdata.deductions / (1000 * 60)))
+            time: numberWithCommas(Math.floor(_userdata.deductions / (1000 * 60)))
         }
 
         const embeddedmsg = new MessageEmbed()

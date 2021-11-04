@@ -33,7 +33,7 @@ module.exports = {
         //player did not call coinflip. tell them and exit
         if (args[0]) {
             if (args[0] < 5) {
-                reply = "Wager must be at least 10 minutes"
+                reply = "Wager must be at least 5 minutes"
                 embeddedmsg.setDescription(reply)
                 message.channel.send({ embed: embeddedmsg })
                 return

@@ -17,7 +17,7 @@ module.exports = {
                 userdata = data.users[userid]
                 let totaltime = 0
                 for (const chan in userdata.channels) {
-                    let time = Math.round(userdata.channels[chan].time / (1000 * 60))
+                    let time = Math.floor(userdata.channels[chan].time / (1000 * 60))
                     totaltime = totaltime + time
                 }
                 totals[userdata.nick] = totaltime
@@ -26,7 +26,7 @@ module.exports = {
             embeddesc = "Forbes evaluation of users net worth in this scord"
             for (const userid in data.users) {
                 userdata = data.users[userid]
-                totals[userdata.nick] = Math.round(lib.gettotaltime(userid, data) / (1000 * 60))
+                totals[userdata.nick] = Math.floor(lib.gettotaltime(userid, data) / (1000 * 60))
             }
         }
 
