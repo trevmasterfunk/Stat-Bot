@@ -173,7 +173,7 @@ async function saveJsonData(file, save_path) {  //used lots of places to save an
     }
 }
 
-async function shutdown() {
+async function shutdown(client) {
     await updatedata()
     client.destroy()
     throw new Error("Bot shutting down")

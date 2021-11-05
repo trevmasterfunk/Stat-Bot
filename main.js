@@ -53,9 +53,11 @@ client.on('message', message => {  //runs when bot sees a new message
         client.commands.get("coinflip").execute(message, args, client)
     } else if (command === "slots") {
         client.commands.get("slots").execute(message, args, client)
+    } else if (command === "gift") {
+        client.commands.get("gift").execute(message, args, client)
     } else if (command === "admin" && message.author.id == "353267226733838349") {
         if (args[0] == 'shutdown') {
-            lib.shutdown()
+            lib.shutdown(client)
         }
     }
 })
