@@ -39,6 +39,12 @@ module.exports = {
                 return
             } else {
                 wager = parseInt(args[0], 10)
+                if (wager < 5) {
+                    reply = "Wager must be at least 5 minutes"
+                    embeddedmsg.setDescription(reply)
+                    message.channel.send({ embed: embeddedmsg })
+                    return
+                }
             }
         }
 
