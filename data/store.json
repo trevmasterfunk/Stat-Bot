@@ -12,6 +12,12 @@
       "costdesc": "2,400 Minutes",
       "cost": 2400,
       "cooldown": 432000000
+    },
+    "Scramble": {
+      "description": "Shuffles all nicknames of users currently connected to voice chat",
+      "costdesc": "500 Minutes",
+      "cost": 500,
+      "cooldown": 600000
     }
   },
   "games": {

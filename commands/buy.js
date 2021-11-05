@@ -39,6 +39,9 @@ module.exports = {
             case "Hell":
                 reply = await hell(message, client)
                 break
+            case "Scramble":
+                reply = await randomnames(message)
+                break
         }
 
         const embeddedmsg = new MessageEmbed()
@@ -156,6 +159,86 @@ async function hell(msg, client) {
 
 }
 
+async function randomnames(msg) {
+    let item = "Scramble"
+    let storepath = "./data/store.json"
+    let store = JSON.parse(fs.readFileSync(storepath, 'utf8')).stock
+
+    let cost = store[item].cost * 60000 //cost * conversion to miliseconds
+
+    let receipt = "Not enough money for transaction."
+    let customerid = msg.author.id
+
+    //checks if customer has enough money
+    let userdata = globaluserdata
+    if (lib.gettotaltime(customerid, userdata) <= cost) {
+        return receipt
+    }
+
+    //checks if customer is on cooldown
+    let now = new Date()
+    let then = -999999999999999
+    if (!userdata.users[customerid].cooldowns[item]) {
+        userdata.users[customerid].cooldowns[item] = now
+    } else {
+        then = new Date(userdata.users[customerid].cooldowns[item])
+    }
+    if ((now - then) < store[item].cooldown && then != now) {
+        receipt = item + " is on cooldown for you. Try again in " + Math.round((((store[item].cooldown - (now - then)) / 3600000)) * 10) / 10 + " Hours"
+        return receipt
+    }
+    userdata.users[customerid].cooldowns[item] = now
+
+    let allchannels = msg.guild.channels.cache
+    let usernames = []
+    let changeableusers = []
+
+    for (const chan of allchannels) {
+        if (chan[1].type == 'voice') {
+            let users = await chan[1].members
+            for (let user of users) {
+                if (msg.guild.ownerID !== user[1].id && !user[1].user.bot) {
+                    if (user[1].nickname == null) {
+                        usernames.push(user[1].user.username)
+                    } else {
+                        usernames.push(user[1].nickname)
+                    }
+                    changeableusers.push(user)
+                }
+            }
+
+        }
+    }
+    shuffle(usernames)
+    for (let user of changeableusers) {
+        let rand = getrandom(usernames.length)
+        await user[1].setNickname(usernames[rand])
+        // console.log(user[1].user.username + " : " + usernames[rand]) //used for testing without actually doing anything. comment line above
+        usernames.splice(rand, 1)
+    }
+
+    userdata.users[customerid].deductions = userdata.users[customerid].deductions - cost
+    receipt = "Your purchase of " + item + " was successful!\n "
+    receipt = receipt + ">>> All names have been scrambled! Can you tell who is who? ;)"
+
+    globaluserdata = userdata
+    return receipt
+}
+
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+}
+
+function getrandom(max) {
+    return Math.floor(Math.random() * max)
+}
+
+function shuffle(array) {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex != 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
 }
