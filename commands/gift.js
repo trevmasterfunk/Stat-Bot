@@ -37,6 +37,10 @@ function gift(msg, arguments) {
     if (lib.gettotaltime(customer, userdata) <= gift) {
         reply = "Card declined! Bank says you poor."
         return reply
+    } else if (gift < 0) {
+        userdata.users[customer].deductions = userdata.users[customer].deductions - (60 * 60000)
+        reply = "One hour has been removed from your account. Thanks for your support!"
+        return reply
     }
 
     //currency exchange
