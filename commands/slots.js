@@ -66,7 +66,7 @@ module.exports = {
 
         //checks to make sure user can afford wager
         let usertotaltime = lib.gettotaltime(customerid, data)
-        let wagertemp = wager * 60000
+        let wagertemp = wager * 60000 * spins
         if (usertotaltime <= wagertemp) {
             reply = "Not enough money. You can thank TR!"
             embeddedmsg.setDescription(reply)
