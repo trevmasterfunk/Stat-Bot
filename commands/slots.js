@@ -148,22 +148,23 @@ module.exports = {
             Payout = wager * 5
             payoutresponse = "  Ooo so close! Two in a row!"
         } else if ((rand[0] == (middle - 1) && rand[2] == (middle + 1)) || rand[2] == (middle - 1) && rand[0] == (middle + 1)) {
-            Payout = wager * 2
+            Payout = wager * 3
             payoutresponse = "  You hit a diagonal"
         }
+
+        Payout = Payout * 60000
+        wager = wager * 60000
+
+        data.users[customerid].deductions = data.users[customerid].deductions + Payout - wager
 
         //combine message into embed
         embeddedmsg.setDescription(slotmachineresults)
         embeddedmsg.addFields(
             { name: 'Wager', value: wager, inline: true },
             { name: 'Payout', value: Payout, inline: true },
-            { name: "Response", value: payoutresponse, inline: false }
+            { name: "Response", value: payoutresponse, inline: false },
+            { name: "New Balance", value: Math.floor((lib.gettotaltime(customerid, data) / 60000)), inline: false }
         )
-
-        Payout = Payout * 60000
-        wager = wager * 60000
-
-        data.users[customerid].deductions = data.users[customerid].deductions + Payout - wager
 
         // //save data
         globaluserdata = data

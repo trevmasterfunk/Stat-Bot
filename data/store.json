@@ -25,7 +25,7 @@
       "description": "flip a coin for a chance to win one minute",
       "cost": 1,
       "effect": 2,
-      "cooldown": 2000
+      "cooldown": 1000
     },
     "Slots": {
       "description": "take your chance at odds!",
@@ -46,7 +46,7 @@
         "13": "bailo"
       },
       "jackpot": "erect",
-      "cooldown": 5000
+      "cooldown": 3000
     }
   }
 }
