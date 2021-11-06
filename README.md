@@ -4,8 +4,6 @@ The Stat-Bot is a discord bot that will track all users time in voice channels. 
 
 ### Current Goals
 - Add more items to shop
-- Add gifting command
-- Add way to gamble currency
 - Make the bot server specific
    - currency is only gained in the server a user is connected to
    - ranks command only shows ranks of users in server the command was sent in
