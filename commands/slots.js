@@ -160,7 +160,7 @@ module.exports = {
         //combine message into embed
         embeddedmsg.setDescription(slotmachineresults)
         embeddedmsg.addFields(
-            { name: 'Wager', value: wager, inline: true },
+            { name: 'Wager', value: (wager / 60000), inline: true },
             { name: 'Payout', value: Payout, inline: true },
             { name: "Response", value: payoutresponse, inline: false },
             { name: "New Balance", value: Math.floor((lib.gettotaltime(customerid, data) / 60000)), inline: false }
