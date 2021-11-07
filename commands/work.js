@@ -11,7 +11,7 @@ module.exports = {
         let workrules = JSON.parse(fs.readFileSync(storepath, 'utf8')).work
 
         const embeddedmsg = new MessageEmbed()
-            .setTitle('Work')
+            .setTitle('Work - ' + message.author.username)
 
         let reply
         if (args[0] == 'apply' && args.length == 1) {
