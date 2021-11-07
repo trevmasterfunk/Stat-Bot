@@ -5,7 +5,7 @@ const fs = require('fs')
 const lib = require('./lib.js')
 const keepAlive = require('./server')
 
-let prefix = '+'  //prefix that must be first in message to get bot to issue commands
+let prefix = '-'  //prefix that must be first in message to get bot to issue commands
 
 global.tempdata = { users: {} }  //object that contains all users currently connected to a voice channel, which channel it is, and their join time
 global.globaluserdata = JSON.parse(fs.readFileSync("./data/data.json", 'utf8'))
@@ -59,6 +59,8 @@ client.on('message', message => {  //runs when bot sees a new message
         if (args[0] == 'shutdown') {
             lib.shutdown(client)
         }
+    } else if (command === "w") {
+        client.commands.get("w").execute(message, args)
     }
 })
 

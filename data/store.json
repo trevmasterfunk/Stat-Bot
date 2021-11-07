@@ -48,5 +48,13 @@
       "jackpot": "erect",
       "cooldown": 3000
     }
+  },
+  "work": {
+    "clockInCooldown": 8,
+    "workPeriod": 10,
+    "workWindow": 3,
+    "bonusMod": 2,
+    "maxwork": 10,
+    "bonuspay": 10
   }
 }
