@@ -81,10 +81,8 @@ function clock_in(msg, now, rules) {
         userwork.bonusStreak = 0
         userwork.lastWork = now
         userwork.workcount = 0
-        let nextworktime = new Date(now.getTime() + (rules.workPeriod * 60 * 1000)).toLocaleString("en-US")
         return [
-            { name: "Time Clock", value: "You are now clocked in. Please check back in " + rules.workPeriod + " minutes." },
-            { name: "Check back in at:", value: nextworktime }
+            { name: "Time Clock", value: "You are now clocked in. Please check back in " + rules.workPeriod + " minutes." }
         ]
     }
 }
@@ -115,10 +113,8 @@ function work(msg, now, rules) {
         }
         let pay = userwork.pay + userwork.bonus
         globaluserdata.users[msg.author.id].deductions += pay
-        let nextworktime = new Date(now.getTime() + (rules.workPeriod * 60 * 1000)).toLocaleString("en-US")
         return [
             { name: "Boss", value: "Good Job, you can count to " + rules.workPeriod + ". Now lets see if you can do it again", inline: false },
-            { name: "Check back in at:", value: nextworktime },
             { name: "Pay", value: userwork.pay, inline: true },
             { name: "Bonus", value: userwork.bonus, inline: true },
             { name: "Total", value: pay, inline: true }
