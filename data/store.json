@@ -45,8 +45,9 @@
         "12": "Phat",
         "13": "bailo"
       },
-      "jackpot": "erect",
-      "cooldown": 3000
+      "jackpot1": "erect",
+      "cooldown": 3000,
+      "jackpot2": "CTF"
     }
   },
   "work": {

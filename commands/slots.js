@@ -154,22 +154,35 @@ module.exports = {
             }
 
             //generate rest of response
-            let jackpot = store.games["Slots"].jackpot
+            let jackpot1 = store.games["Slots"].jackpot1
+            let jackpot2 = store.games["Slots"].jackpot2
             let Payout = 0
             let payoutresponse = "   No matches. Try again! Maybe if you bet more you'll win big :)"
             let middle = rand[1]
-            if (choices[rand[0]] == jackpot && choices[rand[1]] == jackpot && choices[rand[2]] == jackpot) {
+            if (choices[rand[0]] == jackpot1 && choices[rand[1]] == jackpot1 && choices[rand[2]] == jackpot1) {
+                //erect jackpot1
                 Payout = wager * 100
-                payoutresponse = "   JACKPOT!!!!!!!!! DING DING DING"
+                payoutresponse = "   ERECT JACKPOT!!!!!!!!! DING DING DING"
+            } else if (choices[rand[0]] == jackpot2 && choices[rand[1]] == jackpot2 && choices[rand[2]] == jackpot2) {
+                //erect jackpot2
+                Payout = data.slots.lossjackpot
+                data.slots.lossjackpot = 500
+                payoutresponse = "   LOSSES JACKPOT!!!!!!!!! DING DING DING"
             } else if (rand[0] == rand[1] && rand[0] == rand[2]) {
+                // three in a row
                 Payout = wager * 10
                 payoutresponse = "   Hot damn! Three in a row!"
             } else if (rand[0] == rand[1] || rand[1] == rand[2]) {
+                //two in a row
                 Payout = wager * 5
                 payoutresponse = "  Ooo so close! Two in a row!"
             } else if ((rand[0] == (middle - 1) && rand[2] == (middle + 1)) || rand[2] == (middle - 1) && rand[0] == (middle + 1)) {
+                //diagonal
                 Payout = wager * 3
                 payoutresponse = "  You hit a diagonal"
+            } else {
+                //no wins
+                data.slots.lossjackpot += wager
             }
 
             totalpayout += Payout
@@ -195,6 +208,10 @@ module.exports = {
             { name: "Total Payout", value: totalpayout, inline: true },
             { name: "New Balance", value: Math.floor((lib.gettotaltime(customerid, data) / 60000)), inline: true }
         )
+        embeddedmsg.addFields(
+            { name: divider + "\n Loss Jackpot!", value: data.slots.lossjackpot, inline: false }
+        )
+
         // //save data
         globaluserdata = data
 

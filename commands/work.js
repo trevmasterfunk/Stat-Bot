@@ -137,7 +137,7 @@ function work(msg, now, rules) {
             { name: "Bonus", value: userwork.bonus, inline: true },
             { name: "Total", value: pay, inline: true }
         ]
-    } else if (timediff > (rules.clockInCooldown * 3600000)) {
+    } else if (((now - globaluserdata.users[msg.author.id].work.clockin) / 3600000) < rules.clockInCooldown) {
         return [
             { name: "Boss", vlaue: "Where have you been! Clock in!" }
         ]
