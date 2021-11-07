@@ -97,7 +97,7 @@ function work(msg, now, rules) {
             { name: "Boss", value: "Excuse me! You are not an employee! If you want to work so bad why don't you submit an application!" }
         ]
     }
-    let then = globaluserdata.users[msg.author.id].work.lastWork
+    let then = new Date(globaluserdata.users[msg.author.id].work.lastWork)
     let timediff = (now - then) / 60000
     if (globaluserdata.users[msg.author.id].work.workcount >= rules.maxwork) {
         return [
@@ -141,5 +141,15 @@ function work(msg, now, rules) {
         return [
             { name: "Boss", vlaue: "Where have you been! Clock in!" }
         ]
-    }
+    } else return [
+        { name: "then", value: then },
+        { name: "now", value: now },
+        { name: "timediff", value: timediff },
+        { name: "workcount", value: globaluserdata.users[msg.author.id].work.workcount },
+        { name: "maxworkcount", value: rules.maxwork },
+        { name: "maxworkcount", value: rules.workPeriod },
+        { name: "workperiod + workwindow", value: (rules.workPeriod + rules.workWindow) },
+        { name: "clock in cooldown", value: (rules.clockInCooldown * 60) },
+        { name: "clock in cooldown hours", value: (rules.clockInCooldown * 3600000) }
+    ]
 }
