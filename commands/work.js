@@ -26,6 +26,10 @@ module.exports = {
         } else if (args[0] == 'help' && args.length == 1) {
             reply = help(workrules)
             embeddedmsg.addFields(reply)
+        } else {
+            embeddedmsg.addFields(
+                { name: "Boss", value: "I'm going to have to ask you to leave." }
+            )
         }
 
         message.channel.send({ embed: embeddedmsg })
@@ -39,7 +43,7 @@ function help(rules) {
         { name: "Clock In", value: "Use '-w clock in' to start your working period. You can clock in every " + rules.clockInCooldown + " hours." },
         {
             name: "Work", value: "Use '-w work' to check in with your boss. You must check in every " + rules.workPeriod + " minutes. " +
-                "You do have a " + rules.workWindow + " window after to clock in without punishment. " +
+                "You do have a " + rules.workWindow + " minute window after to clock in without punishment. " +
                 "Every time you check back in on time you get a bonus point. Every " + rules.bonusMod + " points your bonus pay will increase by " + rules.bonuspay + ". "
         }
     ]
@@ -112,7 +116,7 @@ function work(msg, now, rules) {
             userwork.bonus += rules.bonuspay
         }
         let pay = userwork.pay + userwork.bonus
-        globaluserdata.users[msg.author.id].deductions += pay
+        globaluserdata.users[msg.author.id].deductions += (pay * 60000)
         return [
             { name: "Boss", value: "Good Job, you can count to " + rules.workPeriod + ". Now lets see if you can do it again", inline: false },
             { name: "Pay", value: userwork.pay, inline: true },
@@ -126,7 +130,7 @@ function work(msg, now, rules) {
         userwork.bonusStreak = 0
         userwork.bonus = 0
         let pay = userwork.pay
-        globaluserdata.users[msg.author.id].deductions += pay
+        globaluserdata.users[msg.author.id].deductions += (pay * 60000)
         return [
             { name: "Boss", value: "You're late. Its been forever. If you're not careful I'll have to feed you to beandy (scary).", inline: false },
             { name: "Pay", value: userwork.pay, inline: true },
