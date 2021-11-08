@@ -26,7 +26,7 @@ function tempdatainit(bot) {  //initializes global temp object based on who is i
     })
 }
 
-function checkstates(oldv, newv) {  //called when there is a voicestateupdate event. checks to see if anyone joined, left, or moved voice channels
+function checkstates(oldv, newv, client) {  //called when there is a voicestateupdate event. checks to see if anyone joined, left, or moved voice channels
     let banlist = "./data/data.json"
     let banned = JSON.parse(fs.readFileSync(banlist, 'utf8'))
     banned = banned.banned
@@ -38,6 +38,8 @@ function checkstates(oldv, newv) {  //called when there is a voicestateupdate ev
     let oldChannelNick
     let newChannelId
     let newChannelNick
+
+    shutup(client)
 
     if (banned[userId]) { return }
 
@@ -179,4 +181,42 @@ async function shutdown(client) {
     throw new Error("Bot shutting down")
 }
 
-module.exports = { checkstates, tempdatainit, saveJsonData, updatedata, gettotaltime, shutdown }
+async function shutup(client) {
+
+    if (mutelist.length > 0) {
+        for (user of mutelist) {
+            let userid = user.id
+            let tts = new Date(user.stopat)
+            let now = new Date()
+            console.log((now - tts) / 60000)
+            if ((now - tts) < 0) {
+                var channels = client.channels.cache.values()
+                for (let i = 0; i < client.channels.cache.size; i++) {
+                    var chan = channels.next().value
+                    if (chan.type === 'voice') {
+                        var chanid = chan.id
+                        var members = chan.members.keys()
+                        for (let j = 0; j <= chan.members.size; j++) {
+                            if (members.next().value === userid) {
+                                var membertarget = client.channels.cache.get(chanid).members.get(userid).voice
+                                if (!membertarget.serverMute) {
+                                    try {
+                                        await membertarget.setMute(true)
+                                    } catch (e) {
+                                        // console.error(e)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                mutelist.shift()
+            }
+        }
+    }
+
+
+}
+
+module.exports = { checkstates, tempdatainit, saveJsonData, updatedata, gettotaltime, shutdown, shutup }

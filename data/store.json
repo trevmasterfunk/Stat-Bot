@@ -18,6 +18,13 @@
       "costdesc": "500 Minutes",
       "cost": 500,
       "cooldown": 600000
+    },
+    "SUB": {
+      "description": "Server mutes a target repeatedly for one minute.",
+      "costdesc": "1000",
+      "cost": 1000,
+      "cooldown": 432000000,
+      "length": 60000
     }
   },
   "games": {

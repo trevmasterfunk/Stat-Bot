@@ -42,6 +42,9 @@ module.exports = {
             case "Scramble":
                 reply = await randomnames(message)
                 break
+            case "SUB":
+                reply = shutup(message)
+                break
         }
 
         const embeddedmsg = new MessageEmbed()
@@ -225,6 +228,57 @@ async function randomnames(msg) {
     return receipt
 }
 
+function shutup(msg, client) {
+    let item = "SUB"
+    let storepath = "./data/store.json"
+    let store = JSON.parse(fs.readFileSync(storepath, 'utf8')).stock
+
+    let cost = store[item].cost * 60000 //cost * conversion to miliseconds
+
+    let receipt = "Not enough money for transaction."
+    let customerid = msg.author.id
+
+    //checks if customer has enough money
+    let userdata = globaluserdata
+    if (lib.gettotaltime(customerid, userdata) <= cost) {
+        return receipt
+    }
+
+    //checks if customer is on cooldown
+    let now = new Date()
+    let then = -999999999999999
+    if (!userdata.users[customerid].cooldowns[item]) {
+        userdata.users[customerid].cooldowns[item] = now
+    } else {
+        then = new Date(userdata.users[customerid].cooldowns[item])
+    }
+    if ((now - then) < store[item].cooldown && then != now) {
+        receipt = item + " is on cooldown for you. Try again in " + Math.round((((store[item].cooldown - (now - then)) / 3600000)) * 10) / 10 + " Hours"
+        return receipt
+    }
+    userdata.users[customerid].cooldowns[item] = now
+
+    //too many mentions have been added to message
+    if (msg.mentions.users.size > 1) {
+        receipt = "Too many users mentioned. Mute yourself bitch."
+        return receipt
+    }
+
+    let victim = msg.mentions.users.entries().next().value
+    let victimid = victim[0]
+    victim = victim[1]
+    let stopmute = addMinutes(now, 1)
+
+    mutelist.push({ id: victimid, stopat: stopmute })
+
+    userdata.users[customerid].deductions = userdata.users[customerid].deductions - cost
+    receipt = "Your purchase of " + item + " was successful!\n "
+    receipt = receipt + ">>> " + victim.username + " will be servermuted for one minute. " + victim.username + ", you can thank " + msg.author.username + "."
+
+    globaluserdata = userdata
+    return receipt
+}
+
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
 }
@@ -241,4 +295,8 @@ function shuffle(array) {
         [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
     }
     return array;
+}
+
+function addMinutes(date, minutes) {
+    return new Date(date.getTime() + minutes * 60000)
 }

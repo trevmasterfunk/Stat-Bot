@@ -10,6 +10,7 @@ let prefix = '-'  //prefix that must be first in message to get bot to issue com
 global.tempdata = { users: {} }  //object that contains all users currently connected to a voice channel, which channel it is, and their join time
 global.globaluserdata = JSON.parse(fs.readFileSync("./data/data.json", 'utf8'))
 global.busy = false
+global.mutelist = []
 
 client.commands = new Discord.Collection()
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'))
@@ -65,7 +66,7 @@ client.on('message', message => {  //runs when bot sees a new message
 })
 
 client.on('voiceStateUpdate', async (oldState, newState) => { //called any time anything in a voice channel changes such as user mute, user deafened, channel change
-    lib.checkstates(oldState, newState)
+    lib.checkstates(oldState, newState, client)
 })
 
 keepAlive()
