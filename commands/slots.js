@@ -68,7 +68,7 @@ module.exports = {
         let usertotaltime = lib.gettotaltime(customerid, data)
         let wagertemp = wager * 60000 * spins
         if (usertotaltime <= wagertemp) {
-            reply = "Not enough money. You can thank TR!"
+            reply = "Not enough money."
             embeddedmsg.setDescription(reply)
             message.channel.send({ embed: embeddedmsg })
             return

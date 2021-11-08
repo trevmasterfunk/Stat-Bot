@@ -5,12 +5,14 @@ const fs = require('fs')
 const lib = require('./lib.js')
 const keepAlive = require('./server')
 
-let prefix = '-'  //prefix that must be first in message to get bot to issue commands
+let prefix = '+'  //prefix that must be first in message to get bot to issue commands
 
 global.tempdata = { users: {} }  //object that contains all users currently connected to a voice channel, which channel it is, and their join time
 global.globaluserdata = JSON.parse(fs.readFileSync("./data/data.json", 'utf8'))
 global.busy = false
-global.mutelist = []
+
+let spamMap = new Map()
+let mutelist = new Map()
 
 client.commands = new Discord.Collection()
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'))
@@ -31,7 +33,10 @@ client.on('message', message => {  //runs when bot sees a new message
     if (busy) { return }
     let banned = globaluserdata.banned
 
-    if (!message.content.startsWith(prefix) || message.author.bot) return  //message has to have prefix and not be a bot
+    if (!message.content.startsWith(prefix) || message.author.bot || mutelist.has(message.author.id)) return  //message has to have prefix and not be a bot
+
+    antispam(message)
+
     if (banned[message.author.id]) {
         message.channel.send("You cant use this bots commands. You are also not tracked by this bot. Reason: " + banned[message.author.id].Reason)  //reply to banned user trying to use bot
         return
@@ -71,3 +76,44 @@ client.on('voiceStateUpdate', async (oldState, newState) => { //called any time 
 
 keepAlive()
 client.login(process.env.BOTTOKEN)
+
+
+function antispam(msg) {
+    if (spamMap.has(msg.author.id)) {
+        const userdata = spamMap.get(msg.author.id)
+        const { lastMessage, timer } = userdata
+        const difference = msg.createdTimestamp - lastMessage.createdTimestamp
+        let msgCount = userdata.msgCount
+        if (difference > 2500) {
+            clearTimeout(timer)
+            userdata.msgCount = 1
+            userdata.lastMessage = msg
+            userdata.timer = setTimeout(() => {
+                spamMap.delete(msg.author.id)
+            }, 5000)
+            spamMap.set(msg.author.id, userdata)
+        } else {
+            ++msgCount
+            if (parseInt(msgCount) === 5) {
+                mutelist.set(msg.author.id)
+                setTimeout(() => {
+                    mutelist.delete(msg.author.id)
+                    msg.reply('You are no longer ignored.')
+                }, 60000);
+                msg.reply('You will be ignored for the next minute.')
+            } else {
+                userdata.msgCount = msgCount
+                spamMap.set(msg.author.id, userdata)
+            }
+        }
+    } else {
+        let fn = setTimeout(() => {
+            spamMap.delete(msg.author.id)
+        }, 5000)
+        spamMap.set(msg.author.id, {
+            msgCount: 1,
+            lastMessage: msg,
+            timer: fn
+        })
+    }
+}

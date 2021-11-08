@@ -10,6 +10,12 @@ module.exports = {
         if (message.mentions.users.size > 1) {
             message.channel.send('Invalid input.')
             return
+        } else if (args[1] == null) {
+            message.reply('Invalid Input')
+            return
+        } else if (isNaN(parseInt(args[1], 10))) {
+            message.reply('Invalid Input')
+            return
         }
 
         let reply = gift(message, args)
