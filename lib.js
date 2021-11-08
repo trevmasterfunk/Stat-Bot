@@ -219,4 +219,52 @@ async function shutup(client) {
 
 }
 
-module.exports = { checkstates, tempdatainit, saveJsonData, updatedata, gettotaltime, shutdown, shutup }
+function antispam(msg, warnNum, maxNum, clearTime, maxTime, ignoreTime) {
+    if (spamMap.has(msg.author.id)) {
+        const userdata = spamMap.get(msg.author.id)
+        const { lastMessage, timer } = userdata
+        const difference = msg.createdTimestamp - lastMessage.createdTimestamp
+        let msgCount = userdata.msgCount
+        if (difference > clearTime) {
+            clearTimeout(timer)
+            userdata.msgCount = 1
+            userdata.lastMessage = msg
+            userdata.timer = setTimeout(() => {
+                spamMap.delete(msg.author.id)
+            }, maxTime),
+                userdata.warned = false
+            spamMap.set(msg.author.id, userdata)
+        } else {
+            ++msgCount
+            console.log(msgCount)
+            console.log(userdata.warned)
+            if (parseInt(msgCount) === warnNum && !userdata.warned) {
+                msg.reply('If you keep spamming you will be ignored for' + (ignoreTime / 60000) + ' minute(s).')
+                userdata.warned = true
+                spamMap.set(msg.author.id, userdata)
+            } else if (parseInt(msgCount) === maxNum && userdata.warned) {
+                mutelist.set(msg.author.id)
+                setTimeout(() => {
+                    mutelist.delete(msg.author.id)
+                    msg.reply('You are no longer ignored.')
+                }, ignoreTime);
+                msg.reply('You will be ignored for the next ' + (ignoreTime / 60000) + ' minute(s).')
+            } else {
+                userdata.msgCount = msgCount
+                spamMap.set(msg.author.id, userdata)
+            }
+        }
+    } else {
+        let fn = setTimeout(() => {
+            spamMap.delete(msg.author.id)
+        }, maxTime)
+        spamMap.set(msg.author.id, {
+            msgCount: 1,
+            lastMessage: msg,
+            timer: fn,
+            warned: false
+        })
+    }
+}
+
+module.exports = { checkstates, tempdatainit, saveJsonData, updatedata, gettotaltime, shutdown, shutup, antispam }
