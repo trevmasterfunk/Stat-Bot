@@ -239,7 +239,7 @@ function antispam(msg, warnNum, maxNum, clearTime, maxTime, ignoreTime) {
             console.log(msgCount)
             console.log(userdata.warned)
             if (parseInt(msgCount) === warnNum && !userdata.warned) {
-                msg.reply('If you keep spamming you will be ignored for' + (ignoreTime / 60000) + ' minute(s).')
+                msg.reply('If you keep spamming you will be ignored for ' + (ignoreTime / 60000) + ' minute(s).')
                 userdata.warned = true
                 spamMap.set(msg.author.id, userdata)
             } else if (parseInt(msgCount) === maxNum && userdata.warned) {
