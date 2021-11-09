@@ -37,7 +37,7 @@ client.on('message', message => {  //runs when bot sees a new message
 
     if (!message.content.startsWith(prefix) || message.author.bot || mutelist.has(message.author.id)) return  //message has to have prefix and not be a bo
 
-    lib.antispam(message, 3, 5, 3000, 6000, 60000) //parameters: message; number of messages to trigger warning; number of messages to trigger ignore; time between messages; time until person is cleared from spamchecklist; time ignored
+    lib.antispam(message, 3, 5, 3000, 5000, 60000) //parameters: message; number of messages to trigger warning; number of messages to trigger ignore; time between messages; time until person is cleared from spamchecklist; time ignored
 
     if (banned[message.author.id]) {
         message.channel.send("You cant use this bots commands. You are also not tracked by this bot. Reason: " + banned[message.author.id].Reason)  //reply to banned user trying to use bot
