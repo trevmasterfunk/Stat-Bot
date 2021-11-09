@@ -14,6 +14,7 @@ global.shutuplist = []
 
 global.spamMap = new Map()
 global.mutelist = new Map()
+global.games = new Map()
 
 client.commands = new Discord.Collection()
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'))
@@ -68,8 +69,14 @@ client.on('message', message => {  //runs when bot sees a new message
         }
     } else if (command === "w") {
         client.commands.get("w").execute(message, args)
+    } else if (command === "deathroll") {
+        client.commands.get("deathroll").execute(message, args)
+    } else if (command === "roll") {
+        client.commands.get("roll").execute(message, args)
     }
 })
+
+
 
 client.on('voiceStateUpdate', async (oldState, newState) => { //called any time anything in a voice channel changes such as user mute, user deafened, channel change
     lib.checkstates(oldState, newState, client)
