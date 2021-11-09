@@ -165,7 +165,7 @@ module.exports = {
                 payoutresponse = "   ERECT JACKPOT!!!!!!!!! DING DING DING"
             } else if (choices[rand[0]] == jackpot2 && choices[rand[1]] == jackpot2 && choices[rand[2]] == jackpot2) {
                 //erect jackpot2
-                Payout = data.slots.lossjackpot
+                Payout = Math.floor(data.slots.lossjackpot)
                 data.slots.lossjackpot = 500
                 payoutresponse = "   LOSSES JACKPOT!!!!!!!!! DING DING DING"
             } else if (rand[0] == rand[1] && rand[0] == rand[2]) {
@@ -182,7 +182,7 @@ module.exports = {
                 payoutresponse = "  You hit a diagonal"
             } else {
                 //no wins
-                data.slots.lossjackpot += wager
+                data.slots.lossjackpot += (wager * 0.5)
             }
 
             totalpayout += Payout
@@ -209,7 +209,7 @@ module.exports = {
             { name: "New Balance", value: Math.floor((lib.gettotaltime(customerid, data) / 60000)), inline: true }
         )
         embeddedmsg.addFields(
-            { name: divider + "\n Loss Jackpot!", value: data.slots.lossjackpot, inline: false }
+            { name: divider + "\n Loss Jackpot!", value: Math.floor(data.slots.lossjackpot), inline: false }
         )
 
         // //save data
