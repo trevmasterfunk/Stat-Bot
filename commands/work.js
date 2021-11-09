@@ -74,7 +74,9 @@ function clock_in(msg, now, rules) {
         return [
             { name: "Boss", value: "Excuse me! You are not an employee! If you want to work so bad why don't you submit an application!" }
         ]
-    } else if (((now - globaluserdata.users[msg.author.id].work.clockin) / 3600000) < rules.clockInCooldown) {
+    }
+    let lastclockin = new Date(globaluserdata.users[msg.author.id].work.clockin)
+    if (((now - lastclockin) / 3600000) < rules.clockInCooldown) {
         return [
             { name: "Time Clock", value: "You already clocked in today!" }
         ]
@@ -99,6 +101,7 @@ function work(msg, now, rules) {
     }
     let then = new Date(globaluserdata.users[msg.author.id].work.lastWork)
     let timediff = (now - then) / 60000
+    let lastclockin = new Date(globaluserdata.users[msg.author.id].work.clockin)
     if (globaluserdata.users[msg.author.id].work.workcount >= rules.maxwork) {
         return [
             { name: "Boss", value: "You've done enough. Get out of here." }
@@ -137,7 +140,7 @@ function work(msg, now, rules) {
             { name: "Bonus", value: userwork.bonus, inline: true },
             { name: "Total", value: pay, inline: true }
         ]
-    } else if (((now - globaluserdata.users[msg.author.id].work.clockin) / 3600000) < rules.clockInCooldown) {
+    } else if (((now - lastclockin) / 3600000) < rules.clockInCooldown) {
         return [
             { name: "Boss", vlaue: "Where have you been! Clock in!" }
         ]
