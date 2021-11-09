@@ -269,7 +269,7 @@ function shutup(msg, client) {
     victim = victim[1]
     let stopmute = addMinutes(now, 1)
 
-    mutelist.push({ id: victimid, stopat: stopmute })
+    shutuplist.push({ id: victimid, stopat: stopmute })
 
     userdata.users[customerid].deductions = userdata.users[customerid].deductions - cost
     receipt = "Your purchase of " + item + " was successful!\n "

@@ -10,6 +10,7 @@ let prefix = '-'  //prefix that must be first in message to get bot to issue com
 global.tempdata = { users: {} }  //object that contains all users currently connected to a voice channel, which channel it is, and their join time
 global.globaluserdata = JSON.parse(fs.readFileSync("./data/data.json", 'utf8'))
 global.busy = false
+global.shutuplist = []
 
 global.spamMap = new Map()
 global.mutelist = new Map()

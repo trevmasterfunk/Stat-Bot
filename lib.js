@@ -183,8 +183,8 @@ async function shutdown(client) {
 
 async function shutup(client) {
 
-    if (mutelist.length > 0) {
-        for (user of mutelist) {
+    if (shutuplist.length > 0) {
+        for (user of shutuplist) {
             let userid = user.id
             let tts = new Date(user.stopat)
             let now = new Date()
@@ -203,7 +203,7 @@ async function shutup(client) {
                                     try {
                                         await membertarget.setMute(true)
                                     } catch (e) {
-                                        // console.error(e)
+                                        console.error(e)
                                     }
                                 }
                             }
@@ -211,7 +211,7 @@ async function shutup(client) {
                     }
                 }
             } else {
-                mutelist.shift()
+                shutuplist.shift()
             }
         }
     }
