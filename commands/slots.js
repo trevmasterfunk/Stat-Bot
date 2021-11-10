@@ -156,33 +156,39 @@ module.exports = {
             //generate rest of response
             let jackpot1 = store.games["Slots"].jackpot1
             let jackpot2 = store.games["Slots"].jackpot2
+            let antipot = store.games["Slots"].antipot
             let Payout = 0
             let payoutresponse = "   No matches. Try again! Maybe if you bet more you'll win big :)"
             let middle = rand[1]
             if (choices[rand[0]] == jackpot1 && choices[rand[1]] == jackpot1 && choices[rand[2]] == jackpot1) {
                 //erect jackpot1
-                Payout = wager * 100
+                Payout = wager * 200
                 payoutresponse = "   ERECT JACKPOT!!!!!!!!! DING DING DING"
             } else if (choices[rand[0]] == jackpot2 && choices[rand[1]] == jackpot2 && choices[rand[2]] == jackpot2) {
-                //erect jackpot2
+                //loss jackpot2
                 Payout = Math.floor(data.slots.lossjackpot)
                 data.slots.lossjackpot = 500
                 payoutresponse = "   LOSSES JACKPOT!!!!!!!!! DING DING DING"
+            } else if (choices[rand[0]] == antipot && choices[rand[1]] == antipot && choices[rand[2]] == antipot) {
+                //antipot jackpot2
+                Payout = Math.floor(-0.5 * (lib.gettotaltime(customerid, globaluserdata) / 60000))
+                hell(customerid, client)
+                payoutresponse = "   ANTI POT!!!!!!!!! DING DING DING"
             } else if (rand[0] == rand[1] && rand[0] == rand[2]) {
                 // three in a row
-                Payout = wager * 10
+                Payout = wager * 50
                 payoutresponse = "   Hot damn! Three in a row!"
             } else if (rand[0] == rand[1] || rand[1] == rand[2]) {
                 //two in a row
-                Payout = wager * 5
+                Payout = wager * 3
                 payoutresponse = "  Ooo so close! Two in a row!"
             } else if ((rand[0] == (middle - 1) && rand[2] == (middle + 1)) || rand[2] == (middle - 1) && rand[0] == (middle + 1)) {
                 //diagonal
-                Payout = wager * 3
+                Payout = wager * 20
                 payoutresponse = "  You hit a diagonal"
             } else {
                 //no wins
-                data.slots.lossjackpot += (wager * 0.5)
+                data.slots.lossjackpot += (wager * 0.1)
             }
 
             totalpayout += Payout
@@ -221,4 +227,26 @@ module.exports = {
 
 function getrandom(max) {
     return Math.floor(Math.random() * max)
+}
+
+
+async function hell(customerid, client) {
+    let usersdcd = 0
+    let channels = client.channels.cache.values()
+    for (const chan of channels) {
+        let members = chan.members.values()
+        if (chan.type == 'voice') {
+            for (const member of members) {
+                if (member.id !== customerid) {
+                    usersdcd++
+                    let target = client.channels.cache.get(chan.id).members.get(member.id)
+                    try {
+                        await target.voice.kick()
+                    } catch (e) {
+                        console.error(e)
+                    }
+                }
+            }
+        }
+    }
 }

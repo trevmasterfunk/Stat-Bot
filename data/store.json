@@ -50,11 +50,13 @@
         "10": "jbbadday",
         "11": "erect",
         "12": "Phat",
-        "13": "bailo"
+        "13": "bailo",
+        "14": "tdoghap"
       },
       "jackpot1": "erect",
       "cooldown": 3000,
-      "jackpot2": "CTF"
+      "jackpot2": "tdoghap",
+      "antipot": "0interest"
     }
   },
   "work": {

@@ -267,4 +267,26 @@ function antispam(msg, warnNum, maxNum, clearTime, maxTime, ignoreTime) {
     }
 }
 
-module.exports = { checkstates, tempdatainit, saveJsonData, updatedata, gettotaltime, shutdown, shutup, antispam }
+function cleanslate() {
+    let userdata = globaluserdata.users
+    for (user in userdata) {
+        let stattotal = 0
+        let channels = userdata[user].channels
+        for (chan in channels) {
+            stattotal += channels[chan].time
+        }
+        userdata[user].deductions = -1 * stattotal
+        userdata[user].cooldowns = {}
+        userdata[user].work = {
+            clockin: "",
+            pay: 10,
+            bonus: 0,
+            bonusStreak: 0,
+            lastWork: "",
+            workcount: 0
+        }
+    }
+    globaluserdata = userdata
+}
+
+module.exports = { checkstates, tempdatainit, saveJsonData, updatedata, gettotaltime, shutdown, shutup, antispam, cleanslate }
