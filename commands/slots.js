@@ -162,7 +162,7 @@ module.exports = {
             let middle = rand[1]
             if (choices[rand[0]] == jackpot1 && choices[rand[1]] == jackpot1 && choices[rand[2]] == jackpot1) {
                 //erect jackpot1
-                Payout = wager * 200
+                Payout = wager * 300
                 payoutresponse = "   ERECT JACKPOT!!!!!!!!! DING DING DING"
             } else if (choices[rand[0]] == jackpot2 && choices[rand[1]] == jackpot2 && choices[rand[2]] == jackpot2) {
                 //loss jackpot2
@@ -180,7 +180,7 @@ module.exports = {
                 payoutresponse = "   Hot damn! Three in a row!"
             } else if (rand[0] == rand[1] || rand[1] == rand[2]) {
                 //two in a row
-                Payout = wager * 3
+                Payout = wager * 4
                 payoutresponse = "  Ooo so close! Two in a row!"
             } else if ((rand[0] == (middle - 1) && rand[2] == (middle + 1)) || rand[2] == (middle - 1) && rand[0] == (middle + 1)) {
                 //diagonal

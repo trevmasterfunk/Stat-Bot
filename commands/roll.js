@@ -79,5 +79,5 @@ function getgame(playerid) {
 }
 
 function randomNumber(max) {
-    return Math.floor(Math.random() * (max - 1)) + 1
+    return Math.floor(Math.random() * max) + 1
 }
