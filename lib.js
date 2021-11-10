@@ -188,7 +188,6 @@ async function shutup(client) {
             let userid = user.id
             let tts = new Date(user.stopat)
             let now = new Date()
-            console.log((now - tts) / 60000)
             if ((now - tts) < 0) {
                 var channels = client.channels.cache.values()
                 for (let i = 0; i < client.channels.cache.size; i++) {
@@ -236,8 +235,6 @@ function antispam(msg, warnNum, maxNum, clearTime, maxTime, ignoreTime) {
             spamMap.set(msg.author.id, userdata)
         } else {
             ++msgCount
-            console.log(msgCount)
-            console.log(userdata.warned)
             if (parseInt(msgCount) === warnNum && !userdata.warned) {
                 msg.reply('If you keep spamming you will be ignored for ' + (ignoreTime / 60000) + ' minute(s).')
                 userdata.warned = true
