@@ -283,7 +283,7 @@ function cleanslate() {
             workcount: 0
         }
     }
-    globaluserdata = userdata
+    globaluserdata.users = userdata
 }
 
 module.exports = { checkstates, tempdatainit, saveJsonData, updatedata, gettotaltime, shutdown, shutup, antispam, cleanslate }
