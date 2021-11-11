@@ -286,4 +286,34 @@ function cleanslate() {
     globaluserdata.users = userdata
 }
 
-module.exports = { checkstates, tempdatainit, saveJsonData, updatedata, gettotaltime, shutdown, shutup, antispam, cleanslate }
+async function fetchallmessages(channelid, limit, client) { //channel id is the id of a text channel; limit is the number of messages to return
+
+    let channel = await client.channels.cache.get(channelid)
+
+    if (!channel) {
+        throw new Error(`Expected channel, got ${typeof channel}.`);
+    }
+    if (limit <= 100) {
+        return channel.messages.fetch({ limit });
+    }
+    let allMessages = new Map()
+    let lastId = null;
+    let options = {};
+    let remaining = limit;
+    while (remaining > 0) {
+        options.limit = remaining > 100 ? 100 : remaining;
+        remaining = remaining > 100 ? remaining - 100 : 0;
+        if (lastId) {
+            options.before = lastId;
+        }
+        let messages = await channel.messages.fetch(options);
+        if (!messages.last()) {
+            break;
+        }
+        lastId = messages.last().id;
+        messages.forEach(message => allMessages.set(message.id, message))
+    }
+    return allMessages;
+}
+
+module.exports = { checkstates, tempdatainit, saveJsonData, updatedata, gettotaltime, shutdown, shutup, antispam, cleanslate, fetchallmessages }
