@@ -39,6 +39,7 @@ module.exports = {
 
         if (roll == 1) {
             globaluserdata.users[nextplayerid].deductions += Math.round(game.wager * 0.95)
+            games.set(key, {})
             games.delete(key)
             const resultsEmbed = new MessageEmbed()
                 .setTitle('Deathroll Won!')

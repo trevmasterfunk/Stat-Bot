@@ -16,7 +16,9 @@ module.exports = {
         }
 
         let wager = args[0] * 60000
-        if (lib.gettotaltime(message.author.id, globaluserdata) <= wager) {
+        let challenged = message.mentions.users.entries().next().value
+        let challengedid = challenged[0]
+        if (lib.gettotaltime(message.author.id, globaluserdata) <= wager && wager > 0 && lib.gettotaltime(challengedid, globaluserdata) <= wager) {
             const resultsEmbed = new MessageEmbed()
                 .setTitle('Transaction Failed')
                 .setDescription("Not enough money.")
